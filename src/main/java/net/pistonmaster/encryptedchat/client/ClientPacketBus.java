@@ -1,6 +1,7 @@
 package net.pistonmaster.encryptedchat.client;
 
 import lombok.RequiredArgsConstructor;
+import net.pistonmaster.encryptedchat.data.GroupInfo;
 import net.pistonmaster.encryptedchat.packet.TestMessagePacket;
 import net.pistonmaster.encryptedchat.packet.client.*;
 import net.pistonmaster.encryptedchat.data.StorageUser;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class ClientPacketBus {
     private final ClientMain clientMain;
     private UUID clientUserId;
+    private GroupInfo groupInfo;
 
     public void handle(ClientboundDisconnect packet) {
         System.out.printf("Disconnected from server: %s", packet.getReason());
@@ -22,8 +24,10 @@ public class ClientPacketBus {
         });
     }
 
-    public void handle(ClientboundMemberJoin packet) {
-
+    public void handle(ClientboundGroupJoin packet) {
+        groupInfo = packet.getGroupInfo();
+        clientMain.getConsoleInput().setPrefixInfo(groupInfo.groupName());
+        System.out.printf("Joined group %s with id %s", groupInfo.groupName(), groupInfo.groupId());
     }
 
     public void handle(ClientboundGroupMessage packet) {

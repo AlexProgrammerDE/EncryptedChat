@@ -1,5 +1,8 @@
+import nu.studer.gradle.jooq.JooqEdition
+
 plugins {
     id 'java'
+    id 'nu.studer.jooq' version '8.0'
     id "com.github.roroche.plantuml" version "1.0.2"
 }
 
@@ -24,13 +27,13 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
-    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    implementation 'org.xerial:sqlite-jdbc:3.40.0.0'
-
     implementation 'com.mojang:brigadier:1.0.18'
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    jooqGenerator 'org.xerial:sqlite-jdbc:3.40.0.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
@@ -48,4 +51,45 @@ classDiagram {
     outputFile = project.file('diagrams/class_diagram.plantuml')
     // outputFile = new File("${projectDir}/diagrams/class_diagram.plantuml")
     ignoredClasses = []
+}
+
+jooq {
+    version = '3.17.5'
+    edition = JooqEdition.OSS
+    configurations {
+        main {
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.sqlite.JDBC'
+                    url = 'jdbc:sqlite:server.sqlite'
+                    user = ''
+                    password = ''
+                    properties {
+                        property {
+                            key = 'PAGE_SIZE'
+                            value = 2048
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+                    }
+                    generate {
+                        deprecated = false
+                        records = false
+                        immutablePojos = false
+                        fluentSetters = false
+                    }
+                    target {
+                        packageName = 'net.pistonmaster.encryptedchat.jooq'
+                        directory = 'src/generated/jooq'
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
 }

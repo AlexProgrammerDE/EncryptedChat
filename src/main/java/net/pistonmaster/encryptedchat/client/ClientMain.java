@@ -15,13 +15,22 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.pistonmaster.encryptedchat.EncryptedChat;
+import net.pistonmaster.encryptedchat.crypto.CryptoGenerator;
+import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
+import net.pistonmaster.encryptedchat.packet.server.ServerboundGroupJoin;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
 
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -110,7 +119,6 @@ public class ClientMain implements Runnable {
 
     public void joinOrCreateGroup(String groupName) {
         System.out.println("Joining group " + groupName + "...");
-        consoleInput.setPrefixInfo("[" + groupName + "] ");
-        // TODO
+        channel.channel().writeAndFlush(new ServerboundGroupJoin(groupName, CryptoGenerator.generateRSAKey().getPublic().));
     }
 }

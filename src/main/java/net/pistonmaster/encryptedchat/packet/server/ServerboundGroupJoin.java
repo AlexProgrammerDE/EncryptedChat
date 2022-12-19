@@ -6,9 +6,11 @@ import net.pistonmaster.encryptedchat.packet.Packet;
 
 import java.security.PublicKey;
 
+/**
+ * May also create a new group.
+ */
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class ServerboundGroupCreate extends Packet {
+public class ServerboundGroupJoin extends Packet {
     String groupName;
-    PublicKey groupKey;
 }

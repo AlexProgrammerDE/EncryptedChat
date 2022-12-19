@@ -44,3 +44,5 @@ bin/
 *.sqlite
 /client/
 /diagrams/
+
+src/generated

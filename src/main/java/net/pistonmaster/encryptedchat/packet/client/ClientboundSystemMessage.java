@@ -1,13 +1,11 @@
-package net.pistonmaster.encryptedchat.packet.server;
+package net.pistonmaster.encryptedchat.packet.client;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import net.pistonmaster.encryptedchat.packet.Packet;
 
-import java.util.UUID;
-
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class ServerboundGroupMessage extends Packet {
+public class ClientboundSystemMessage extends Packet {
     String encryptedMessage;
 }

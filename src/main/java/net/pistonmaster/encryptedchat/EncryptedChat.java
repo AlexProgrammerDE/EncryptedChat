@@ -17,7 +17,7 @@ import java.security.PublicKey;
 import java.util.Scanner;
 
 public class EncryptedChat {
-    private static final Path ROOT_PATH = Path.of("");
+    public static final Path ROOT_PATH = Path.of("");
     public static final String SIGNATURE_VALUE = "EncryptedChat";
 
     public static void main(String[] args) {
