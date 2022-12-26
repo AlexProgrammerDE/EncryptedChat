@@ -10,5 +10,6 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 public class ClientboundGroupMessage extends Packet {
     UUID messengerId;
+    String messengerUsername;
     String encryptedMessage;
 }

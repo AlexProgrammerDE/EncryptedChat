@@ -9,7 +9,5 @@ import java.util.UUID;
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class ServerboundUserDataRequest extends Packet {
-    // One of both can be null
     String username;
-    UUID userId;
 }

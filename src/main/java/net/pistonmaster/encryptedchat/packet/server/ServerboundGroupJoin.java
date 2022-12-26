@@ -5,10 +5,8 @@ import lombok.Value;
 import net.pistonmaster.encryptedchat.packet.Packet;
 
 import java.security.PublicKey;
+import java.util.UUID;
 
-/**
- * May also create a new group.
- */
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class ServerboundGroupJoin extends Packet {

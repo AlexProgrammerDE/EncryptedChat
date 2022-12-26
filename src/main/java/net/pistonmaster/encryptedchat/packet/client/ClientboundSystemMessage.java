@@ -7,5 +7,5 @@ import net.pistonmaster.encryptedchat.packet.Packet;
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class ClientboundSystemMessage extends Packet {
-    String encryptedMessage;
+    String message;
 }

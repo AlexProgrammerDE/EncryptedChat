@@ -6,13 +6,13 @@ CREATE TABLE IF NOT EXISTS users
 );
 CREATE TABLE IF NOT EXISTS groups
 (
-    id         TEXT NOT NULL PRIMARY KEY UNIQUE,
-    name       TEXT NOT NULL,
-    public_key TEXT NOT NULL
+    id     TEXT NOT NULL PRIMARY KEY UNIQUE,
+    name   TEXT NOT NULL,
+    key_id TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS group_members
 (
-    group_id TEXT    NOT NULL PRIMARY KEY UNIQUE,
+    group_id TEXT    NOT NULL,
     user_id  TEXT    NOT NULL,
     admin    INTEGER NOT NULL,
     FOREIGN KEY (group_id) REFERENCES groups (id),
