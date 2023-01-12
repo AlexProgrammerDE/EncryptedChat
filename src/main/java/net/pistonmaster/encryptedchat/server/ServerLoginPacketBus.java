@@ -4,7 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
-import net.pistonmaster.encryptedchat.crypto.CryptoUtils;
+import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.packet.client.ClientboundDisconnect;
 import net.pistonmaster.encryptedchat.packet.client.ClientboundLogin;
@@ -30,7 +30,7 @@ public class ServerLoginPacketBus {
             user = serverMain.getStorage().generateUser(packet.getUsername(), packet.getClientKey());
         }
 
-        if (!CryptoUtils.verify(EncryptedChat.SIGNATURE_VALUE, packet.getSignature(), user.userKey())) {
+        if (!CryptoRSAUtils.verify(EncryptedChat.SIGNATURE_VALUE, packet.getSignature(), user.userKey())) {
             channel.writeAndFlush(new ClientboundDisconnect("Invalid signature!"));
             channel.disconnect();
             return;

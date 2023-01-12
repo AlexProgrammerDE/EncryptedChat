@@ -1,5 +1,7 @@
 package net.pistonmaster.encryptedchat.crypto;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,9 +26,11 @@ public class CryptoStorage {
         }
     }
 
-    public static PublicKey loadPublicKey(Path path) {
+    public static SecretKey loadAESKey(Path path) {
         try {
-            return loadPublicKey(Files.readAllBytes(path));
+            byte[] bytes = Files.readAllBytes(path);
+
+            return new SecretKeySpec(bytes, "AES");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,19 +45,6 @@ public class CryptoStorage {
             X509EncodedKeySpec ks = new X509EncodedKeySpec(bytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(ks);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static PublicKey getPublicKey(PrivateKey privateKey) {
-        try {
-            RSAPrivateCrtKey rsaPrivateKey = (RSAPrivateCrtKey) privateKey;
-
-            RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(rsaPrivateKey.getModulus(), rsaPrivateKey.getPublicExponent());
-
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            return keyFactory.generatePublic(publicKeySpec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }

@@ -46,6 +46,7 @@ public class ConsoleInput {
 
     public void setPrefixInfo(String prefixInfo) {
         this.prefixInfo = prefixInfo;
+
         System.out.print("\r" + prefixInfo + "> ");
     }
 }

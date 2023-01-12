@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
-import net.pistonmaster.encryptedchat.crypto.CryptoUtils;
+import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.packet.server.ServerboundLogin;
 import net.pistonmaster.encryptedchat.util.BusHelper;
 import net.pistonmaster.encryptedchat.packet.Packet;
@@ -25,7 +25,7 @@ public class ChatClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(final ChannelHandlerContext ctx) {
         System.out.println("Server channel active! Starting login...");
         ctx.channel().write(new ServerboundLogin(clientMain.getUsername(), clientMain.getPair().getPublic(),
-                CryptoUtils.sign(EncryptedChat.SIGNATURE_VALUE, clientMain.getPair().getPrivate())));
+                CryptoRSAUtils.sign(EncryptedChat.SIGNATURE_VALUE, clientMain.getPair().getPrivate())));
     }
 
     @Override

@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
-public class ServerboundGroupCreate extends Packet {
+public class ServerboundGroupJoin extends Packet {
     String groupName;
-    UUID groupKeyId;
 }

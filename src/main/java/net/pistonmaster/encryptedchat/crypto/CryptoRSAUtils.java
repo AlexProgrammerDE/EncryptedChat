@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Base64;
 
-public class CryptoUtils {
-    public static String encrypt(String message, PrivateKey publicKey) {
+public class CryptoRSAUtils {
+    public static String encrypt(String message, PublicKey publicKey) {
         try {
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);

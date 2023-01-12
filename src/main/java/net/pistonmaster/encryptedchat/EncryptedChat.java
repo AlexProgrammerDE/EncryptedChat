@@ -1,12 +1,11 @@
 package net.pistonmaster.encryptedchat;
 
-import com.mojang.brigadier.CommandDispatcher;
-import lombok.Setter;
 import net.pistonmaster.encryptedchat.client.ClientMain;
 import net.pistonmaster.encryptedchat.crypto.CryptoGenerator;
 import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.server.ServerMain;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
+import org.jooq.impl.DSL;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -17,7 +16,8 @@ import java.security.PublicKey;
 import java.util.Scanner;
 
 public class EncryptedChat {
-    private static final Path ROOT_PATH = Path.of("");
+    public static final Path ROOT_PATH = Path.of("");
+    public static final Path CLIENT_PATH = ROOT_PATH.resolve("client");
     public static final String SIGNATURE_VALUE = "EncryptedChat";
 
     public static void main(String[] args) {
@@ -79,15 +79,15 @@ public class EncryptedChat {
     }
 
     private static KeyPair getOrCreateKeyPair(String clientName) {
-        Path clientFolder = ROOT_PATH.resolve("client").resolve(clientName);
+        Path clientFolder = CLIENT_PATH.resolve(clientName);
         Path privateKeyPath = clientFolder.resolve("private.key");
         if (Files.exists(privateKeyPath)) {
             PrivateKey privateKey = CryptoStorage.loadPrivateKey(privateKeyPath);
-            PublicKey publicKey = CryptoStorage.getPublicKey(privateKey);
+            PublicKey publicKey = CryptoGenerator.getPublicKey(privateKey);
             return new KeyPair(publicKey, privateKey);
         } else {
             try {
-                Files.createDirectories(ROOT_PATH.resolve("client").resolve(clientName));
+                Files.createDirectories(CLIENT_PATH.resolve(clientName));
             } catch (IOException e) {
                 e.printStackTrace();
             }

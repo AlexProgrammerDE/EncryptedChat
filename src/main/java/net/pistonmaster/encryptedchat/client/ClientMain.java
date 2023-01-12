@@ -15,18 +15,22 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.pistonmaster.encryptedchat.EncryptedChat;
+import net.pistonmaster.encryptedchat.crypto.CryptoAESUtils;
+import net.pistonmaster.encryptedchat.crypto.CryptoGenerator;
+import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
+import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
+import net.pistonmaster.encryptedchat.packet.server.*;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
 
+import javax.crypto.SecretKey;
 import javax.net.ssl.X509TrustManager;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -80,13 +84,104 @@ public class ClientMain implements Runnable {
                 return 1;
             }));
 
-            consoleInput.getDispatcher().register(LiteralArgumentBuilder.literal("group").then(RequiredArgumentBuilder.argument("groupName", StringArgumentType.string()).executes(context -> {
-                joinOrCreateGroup(StringArgumentType.getString(context, "groupName"));
-                return 1;
-            })).executes(context -> {
-                System.out.println("Invalid syntax! Use group <name>...");
-                return 1;
-            }));
+            consoleInput.getDispatcher().register(LiteralArgumentBuilder.literal("group")
+                    .then(LiteralArgumentBuilder.literal("create")
+                            .then(RequiredArgumentBuilder.argument("name", StringArgumentType.string())
+                                    .executes(context -> {
+                                        String name = StringArgumentType.getString(context, "name");
+                                        System.out.println("Creating group " + name + "...");
+
+                                        SecretKey secretKey = CryptoGenerator.generateAESKey();
+                                        UUID keyId = UUID.randomUUID();
+
+                                        CryptoStorage.saveKey(secretKey, EncryptedChat.CLIENT_PATH.resolve(keyId + ".aeskey"));
+
+                                        channel.channel().writeAndFlush(new ServerboundGroupCreate(name, keyId));
+
+                                        return 1;
+                                    })
+                            )
+                    )
+                    .then(LiteralArgumentBuilder.literal("join")
+                            .then(RequiredArgumentBuilder.argument("name", StringArgumentType.string())
+                                    .executes(context -> {
+                                        String name = StringArgumentType.getString(context, "name");
+                                        System.out.println("Joining group " + name + "...");
+
+                                        channel.channel().writeAndFlush(new ServerboundGroupJoin(name));
+
+                                        return 1;
+                                    })
+                            )
+                    )
+                    .then(LiteralArgumentBuilder.literal("add")
+                            .then(RequiredArgumentBuilder.argument("name", StringArgumentType.string())
+                                    .executes(context -> {
+                                        if (bus.getGroupInfo() == null || bus.getGroupSecretKey() == null) {
+                                            System.out.println("You are not in a group!");
+                                            return 1;
+                                        }
+
+                                        String name = StringArgumentType.getString(context, "name");
+                                        System.out.println("Adding " + name + " to the group...");
+                                        Optional<StorageUser> optional = knownUsers.stream().filter(storageUser -> storageUser.username().equals(name)).findFirst();
+
+                                        if (optional.isPresent()) {
+                                            StorageUser user = optional.get();
+                                            channel.channel().writeAndFlush(new ServerboundGroupMemberAdd(user.userId(), bus.getGroupInfo().groupId(),
+                                                    CryptoRSAUtils.encrypt(CryptoStorage.saveKeyToString(bus.getGroupSecretKey()), user.userKey())));
+                                        } else {
+                                            System.out.println("User not found! Requesting data from server. Run command again!");
+                                            channel.channel().writeAndFlush(new ServerboundUserDataRequest(name));
+                                        }
+
+                                        return 1;
+                                    })
+                            )
+                    )
+                    .executes(context -> {
+                        System.out.println("Invalid syntax! Use group <join|create> <name>...");
+                        return 1;
+                    }));
+
+            consoleInput.getDispatcher().register(LiteralArgumentBuilder.literal("say")
+                    .then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString())
+                            .executes(context -> {
+                                String message = StringArgumentType.getString(context, "message");
+                                if (bus.getGroupInfo() == null) {
+                                    System.out.println("You are not in a group!");
+                                    return 1;
+                                }
+
+                                System.out.println("Sending message " + message + " to " + bus.getGroupInfo().groupName() + "...");
+
+                                channel.channel().writeAndFlush(new ServerboundGroupMessage(
+                                        CryptoAESUtils.encrypt(message, bus.getGroupSecretKey())));
+
+                                return 1;
+                            })
+                    )
+                    .executes(context -> {
+                        System.out.println("Invalid syntax! Use say <message>...");
+                        return 1;
+                    }));
+
+            consoleInput.getDispatcher().register(LiteralArgumentBuilder.literal("sayunsafe")
+                    .then(RequiredArgumentBuilder.argument("message", StringArgumentType.greedyString())
+                            .executes(context -> {
+                                String message = StringArgumentType.getString(context, "message");
+
+                                System.out.println("Sending unsafe message " + message + "...");
+
+                                channel.channel().writeAndFlush(new ServerboundUnsecureMessage(message));
+
+                                return 1;
+                            })
+                    )
+                    .executes(context -> {
+                        System.out.println("Invalid syntax! Use sayunsafe <message>...");
+                        return 1;
+                    }));
 
             consoleInput.runReadCommandInput(a -> !channel.channel().closeFuture().isDone(), consoleScanner);
         } catch (Exception e) {
@@ -106,11 +201,5 @@ public class ClientMain implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public void joinOrCreateGroup(String groupName) {
-        System.out.println("Joining group " + groupName + "...");
-        consoleInput.setPrefixInfo("[" + groupName + "] ");
-        // TODO
     }
 }
