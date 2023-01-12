@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lombok.Getter;
 
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -33,13 +34,16 @@ public class ConsoleInput {
 
     public void runReadCommandInput(Predicate<Void> predicate, Scanner consoleScanner) {
         while (predicate.test(null)) {
-            String input = consoleScanner.nextLine();
-            if (input.isBlank()) continue;
-
             try {
-                dispatcher.execute(input, null);
-            } catch (CommandSyntaxException e) {
-                System.out.println("Error: " + e.getMessage());
+                String input = consoleScanner.nextLine();
+                if (input.isBlank()) continue;
+
+                try {
+                    dispatcher.execute(input, null);
+                } catch (CommandSyntaxException e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
+            } catch (NoSuchElementException ignored) {
             }
         }
     }

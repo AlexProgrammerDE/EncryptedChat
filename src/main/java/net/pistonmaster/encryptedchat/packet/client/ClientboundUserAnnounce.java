@@ -10,6 +10,7 @@ import java.util.UUID;
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class ClientboundUserAnnounce extends Packet {
+    UUID requestId;
     String username;
     UUID userId;
     PublicKey publicKey;

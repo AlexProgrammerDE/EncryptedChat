@@ -132,7 +132,7 @@ public class ClientMain implements Runnable {
                                                     CryptoRSAUtils.encrypt(CryptoStorage.saveKeyToString(bus.getGroupSecretKey()), user.userKey())));
                                         } else {
                                             System.out.println("User not found! Requesting data from server. Run command again!");
-                                            channel.channel().writeAndFlush(new ServerboundUserDataRequest(name));
+                                            channel.channel().writeAndFlush(new ServerboundUserDataRequest(UUID.randomUUID(), name));
                                         }
 
                                         return 1;

@@ -141,7 +141,8 @@ public class ServerPacketBus {
             return;
         }
 
-        serverMain.getChannels().find(channelId).writeAndFlush(new ClientboundUserAnnounce(user.username(), user.userId(), user.userKey()));
+        serverMain.getChannels().find(channelId).writeAndFlush(new ClientboundUserAnnounce(
+                packet.getRequestId(), user.username(), user.userId(), user.userKey()));
     }
 
     public void handle(TestMessagePacket packet) {

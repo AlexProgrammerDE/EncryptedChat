@@ -56,7 +56,8 @@ public class ClientPacketBus {
     }
 
     public void handle(ClientboundUserAnnounce packet) {
-        clientMain.getKnownUsers().add(new StorageUser(packet.getUsername(), packet.getUserId(), packet.getPublicKey()));
+        StorageUser user = new StorageUser(packet.getUsername(), packet.getUserId(), packet.getPublicKey());
+        clientMain.getKnownUsers().add(user);
         System.out.println("Received user data for " + packet.getUsername());
     }
 
