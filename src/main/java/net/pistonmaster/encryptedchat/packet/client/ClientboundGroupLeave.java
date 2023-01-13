@@ -7,6 +7,6 @@ import net.pistonmaster.encryptedchat.packet.Packet;
 import java.util.UUID;
 
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ClientboundGroupLeave extends Packet {
 }

@@ -5,7 +5,7 @@ import lombok.Value;
 import net.pistonmaster.encryptedchat.packet.Packet;
 
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ClientboundDisconnect extends Packet {
     String reason;
 }

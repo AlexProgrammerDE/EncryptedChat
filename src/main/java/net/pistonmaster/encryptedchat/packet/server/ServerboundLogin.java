@@ -7,7 +7,7 @@ import net.pistonmaster.encryptedchat.packet.Packet;
 import java.security.PublicKey;
 
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ServerboundLogin extends Packet {
     String username;
     PublicKey clientKey;
