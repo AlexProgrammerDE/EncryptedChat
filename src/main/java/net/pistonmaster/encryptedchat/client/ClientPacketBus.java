@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
 import net.pistonmaster.encryptedchat.crypto.CryptoAESUtils;
 import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
-import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.data.GroupInfo;
 import net.pistonmaster.encryptedchat.data.StorageUser;
-import net.pistonmaster.encryptedchat.packet.TestMessagePacket;
 import net.pistonmaster.encryptedchat.packet.client.*;
 
 import javax.crypto.SecretKey;
@@ -39,6 +37,8 @@ public class ClientPacketBus {
     }
 
     public void handle(ClientboundGroupMessage packet) {
+        // TODO: Verify message signature
+
         System.out.printf("[%s] %s", packet.getMessengerUsername(), CryptoAESUtils.decrypt(packet.getEncryptedMessage(), groupSecretKey));
     }
 
@@ -68,9 +68,5 @@ public class ClientPacketBus {
     public void handle(ClientboundLogin packet) {
         clientUserId = packet.getUserId();
         System.out.printf("Logged in with UUID %s", clientUserId);
-    }
-
-    public void handle(TestMessagePacket packet) {
-        System.out.println("I just handled a packet on the client!");
     }
 }

@@ -12,4 +12,5 @@ public class ClientboundGroupMessage extends Packet {
     UUID messengerId;
     String messengerUsername;
     String encryptedMessage;
+    String messageSignature;
 }

@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS group_messages
 (
     group_id TEXT NOT NULL PRIMARY KEY UNIQUE,
     user_id  TEXT NOT NULL,
-    message  TEXT NOT NULL,
+    message_encrypted  TEXT NOT NULL,
+    message_signature  TEXT NOT NULL,
     FOREIGN KEY (group_id) REFERENCES groups (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );

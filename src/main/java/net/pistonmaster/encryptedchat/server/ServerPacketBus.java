@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.data.GroupInfo;
 import net.pistonmaster.encryptedchat.data.StorageGroup;
 import net.pistonmaster.encryptedchat.data.StorageUser;
-import net.pistonmaster.encryptedchat.packet.TestMessagePacket;
 import net.pistonmaster.encryptedchat.packet.client.*;
 import net.pistonmaster.encryptedchat.packet.server.*;
 
@@ -126,7 +125,9 @@ public class ServerPacketBus {
             return;
         }
 
-        serverMain.getChannels().writeAndFlush(new ClientboundGroupMessage(user.userId(), user.username(), packet.getEncryptedMessage()));
+        serverMain.getStorage().storeMessage(group, user.userId(), packet.getEncryptedMessage(), packet.getMessageSignature());
+
+        serverMain.getChannels().writeAndFlush(new ClientboundGroupMessage(user.userId(), user.username(), packet.getEncryptedMessage(), packet.getMessageSignature()));
     }
 
     public void handle(ServerboundUnsecureMessage packet) {
@@ -143,9 +144,5 @@ public class ServerPacketBus {
 
         serverMain.getChannels().find(channelId).writeAndFlush(new ClientboundUserAnnounce(
                 packet.getRequestId(), user.username(), user.userId(), user.userKey()));
-    }
-
-    public void handle(TestMessagePacket packet) {
-        System.out.println("I just handled a packet on the server!");
     }
 }

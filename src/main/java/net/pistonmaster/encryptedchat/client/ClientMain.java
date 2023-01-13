@@ -156,7 +156,8 @@ public class ClientMain implements Runnable {
                                 System.out.println("Sending message " + message + " to " + bus.getGroupInfo().groupName() + "...");
 
                                 channel.channel().writeAndFlush(new ServerboundGroupMessage(
-                                        CryptoAESUtils.encrypt(message, bus.getGroupSecretKey())));
+                                        CryptoAESUtils.encrypt(message, bus.getGroupSecretKey()),
+                                        CryptoRSAUtils.sign(message, pair.getPrivate())));
 
                                 return 1;
                             })

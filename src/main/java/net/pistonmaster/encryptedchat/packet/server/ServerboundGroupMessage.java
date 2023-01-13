@@ -10,4 +10,5 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class ServerboundGroupMessage extends Packet {
     String encryptedMessage;
+    String messageSignature;
 }

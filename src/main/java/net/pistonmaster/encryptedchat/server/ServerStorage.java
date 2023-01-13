@@ -149,7 +149,7 @@ public class ServerStorage {
         List<StorageMessage> messages = ctx.selectFrom(GROUP_MESSAGES)
                 .where(GROUP_MESSAGES.GROUP_ID.eq(record.get(GROUPS.ID)))
                 .fetch()
-                .map(r -> new StorageMessage(UUID.fromString(r.get(GROUP_MESSAGES.USER_ID)), r.get(GROUP_MESSAGES.MESSAGE)));
+                .map(r -> new StorageMessage(UUID.fromString(r.get(GROUP_MESSAGES.USER_ID)), r.get(GROUP_MESSAGES.MESSAGE_ENCRYPTED), r.get(GROUP_MESSAGES.MESSAGE_SIGNATURE)));
 
         return new StorageGroup(record.get(GROUPS.NAME),
                 UUID.fromString(record.get(GROUPS.ID)),
@@ -164,6 +164,20 @@ public class ServerStorage {
             ctx.insertInto(GROUP_MEMBERS)
                     .columns(GROUP_MEMBERS.GROUP_ID, GROUP_MEMBERS.USER_ID, GROUP_MEMBERS.ADMIN)
                     .values(group.groupId().toString(), targetUser.toString(), 0)
+                    .execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void storeMessage(StorageGroup group, UUID sender, String messageEncrypted, String messageSignature) {
+        try (Connection conn = DriverManager.getConnection(url)) {
+            DSLContext ctx = DSL.using(conn, SQLDialect.SQLITE);
+
+            ctx.insertInto(GROUP_MESSAGES)
+                    .columns(GROUP_MESSAGES.GROUP_ID, GROUP_MESSAGES.USER_ID, GROUP_MESSAGES.MESSAGE_ENCRYPTED, GROUP_MESSAGES.MESSAGE_SIGNATURE)
+                    .values(group.groupId().toString(), sender.toString(), messageEncrypted, messageSignature)
                     .execute();
         } catch (Exception e) {
             e.printStackTrace();
