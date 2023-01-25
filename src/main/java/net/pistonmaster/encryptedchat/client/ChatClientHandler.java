@@ -5,9 +5,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
 import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
+import net.pistonmaster.encryptedchat.packet.Packet;
 import net.pistonmaster.encryptedchat.packet.server.ServerboundLogin;
 import net.pistonmaster.encryptedchat.util.BusHelper;
-import net.pistonmaster.encryptedchat.packet.Packet;
 
 @RequiredArgsConstructor
 public class ChatClientHandler extends ChannelInboundHandlerAdapter {

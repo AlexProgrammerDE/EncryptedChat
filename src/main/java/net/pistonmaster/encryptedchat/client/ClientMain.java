@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
 import net.pistonmaster.encryptedchat.crypto.CryptoAESUtils;
 import net.pistonmaster.encryptedchat.crypto.CryptoGenerator;
-import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
+import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
@@ -43,10 +43,10 @@ public class ClientMain implements Runnable {
     private final int targetPort;
     private final String username;
     private final KeyPair pair;
-    private ChannelFuture channel;
     private final ClientPacketBus bus = new ClientPacketBus(this);
     private final ExecutorService shutdownExecutor = Executors.newSingleThreadExecutor();
     private final Set<StorageUser> knownUsers = Collections.synchronizedSet(new HashSet<>());
+    private ChannelFuture channel;
 
     @Override
     public void run() {

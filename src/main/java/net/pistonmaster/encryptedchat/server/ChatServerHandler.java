@@ -4,12 +4,10 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelId;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
-import net.pistonmaster.encryptedchat.packet.TestMessagePacket;
-import net.pistonmaster.encryptedchat.util.BusHelper;
 import net.pistonmaster.encryptedchat.packet.Packet;
+import net.pistonmaster.encryptedchat.util.BusHelper;
 
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 public class ChatServerHandler extends ChannelInboundHandlerAdapter {

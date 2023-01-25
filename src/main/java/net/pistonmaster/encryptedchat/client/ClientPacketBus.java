@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
 import net.pistonmaster.encryptedchat.crypto.CryptoAESUtils;
 import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
-import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.data.GroupInfo;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.packet.TestMessagePacket;

@@ -5,9 +5,8 @@ import net.pistonmaster.encryptedchat.crypto.CryptoGenerator;
 import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.server.ServerMain;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
-import org.jooq.impl.DSL;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyPair;
@@ -73,11 +72,6 @@ public class EncryptedChat {
         }
     }
 
-    enum Type {
-        SERVER,
-        CLIENT
-    }
-
     private static KeyPair getOrCreateKeyPair(String clientName) {
         Path clientFolder = CLIENT_PATH.resolve(clientName);
         Path privateKeyPath = clientFolder.resolve("private.key");
@@ -95,5 +89,10 @@ public class EncryptedChat {
             CryptoStorage.saveKey(keyPair.getPrivate(), privateKeyPath);
             return keyPair;
         }
+    }
+
+    enum Type {
+        SERVER,
+        CLIENT
     }
 }
