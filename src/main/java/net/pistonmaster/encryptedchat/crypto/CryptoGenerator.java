@@ -18,6 +18,7 @@ public class CryptoGenerator {
             throw new RuntimeException(e);
         }
     }
+
     public static SecretKey generateAESKey() {
         try {
             KeyGenerator kpg = KeyGenerator.getInstance("AES");

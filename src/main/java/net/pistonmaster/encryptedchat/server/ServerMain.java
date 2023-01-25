@@ -1,20 +1,19 @@
 package net.pistonmaster.encryptedchat.server;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
@@ -31,10 +30,10 @@ public class ServerMain implements Runnable {
     private final Scanner consoleScanner;
     private final ConsoleInput consoleInput;
     private final int port;
-    private ChannelFuture channel;
     private final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final Map<ChannelId, ConnectionState> channelStates = new ConcurrentHashMap<>();
     private final ServerStorage storage = new ServerStorage(this);
+    private ChannelFuture channel;
 
     @Override
     public void run() {
@@ -78,7 +77,7 @@ public class ServerMain implements Runnable {
                         if (bus instanceof ServerPacketBus serverPacketBus) {
                             builder.append(" - ").append(serverPacketBus.getUser().username());
                         }
-                        System.out.println(builder.toString());
+                        System.out.println(builder);
                     }
                 }
                 return 1;

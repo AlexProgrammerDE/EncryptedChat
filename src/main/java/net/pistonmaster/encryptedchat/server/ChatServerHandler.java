@@ -6,6 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.util.BusHelper;
 import net.pistonmaster.encryptedchat.packet.Packet;
+import net.pistonmaster.encryptedchat.util.BusHelper;
 
 import java.util.Objects;
 

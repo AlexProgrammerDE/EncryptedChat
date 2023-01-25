@@ -10,9 +10,9 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class ConsoleInput {
-    private String prefixInfo = "";
     @Getter
     private final CommandDispatcher<Object> dispatcher = new CommandDispatcher<>();
+    private String prefixInfo = "";
 
     public void registerArrowKey() {
         PrintStream customStream = new PrintStream(System.out) {

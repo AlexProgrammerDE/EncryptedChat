@@ -1,8 +1,8 @@
 package net.pistonmaster.encryptedchat.crypto;
 
 import javax.crypto.*;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class CryptoAESUtils {

@@ -5,7 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.pistonmaster.encryptedchat.packet.Packet;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 
 public class ChannelEncoder extends MessageToByteEncoder<Object> {
     @Override
