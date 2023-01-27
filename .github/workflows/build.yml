@@ -24,6 +24,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Install sqlite
+        run: sudo apt-get install sqlite3
+      - name: Apply schema
+        run: sqlite3 ./server.sqlite < ./server-structure.sql
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload a Build Artifact
