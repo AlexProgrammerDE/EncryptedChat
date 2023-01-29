@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import net.pistonmaster.encryptedchat.packet.Packet;
 
+import java.security.PublicKey;
 import java.util.UUID;
 
 @Value
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class ClientboundGroupMessage extends Packet {
     UUID messengerId;
     String messengerUsername;
+    PublicKey messengerPublicKey;
     String encryptedMessage;
     String messageSignature;
 }

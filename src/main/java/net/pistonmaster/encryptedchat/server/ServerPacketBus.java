@@ -127,7 +127,12 @@ public class ServerPacketBus {
 
         serverMain.getStorage().storeMessage(group, user.userId(), packet.getEncryptedMessage(), packet.getMessageSignature());
 
-        serverMain.getChannels().writeAndFlush(new ClientboundGroupMessage(user.userId(), user.username(), packet.getEncryptedMessage(), packet.getMessageSignature()));
+        serverMain.getChannels().writeAndFlush(new ClientboundGroupMessage(
+                user.userId(),
+                user.username(),
+                user.userKey(),
+                packet.getEncryptedMessage(),
+                packet.getMessageSignature()));
     }
 
     public void handle(ServerboundUnsecureMessage packet) {

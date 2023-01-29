@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.pistonmaster.encryptedchat.EncryptedChat;
 import net.pistonmaster.encryptedchat.crypto.CryptoAESUtils;
+import net.pistonmaster.encryptedchat.crypto.CryptoRSAUtils;
 import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.data.GroupInfo;
 import net.pistonmaster.encryptedchat.data.StorageUser;
@@ -37,9 +38,13 @@ public class ClientPacketBus {
     }
 
     public void handle(ClientboundGroupMessage packet) {
-        // TODO: Verify message signature
+        String message = CryptoAESUtils.decrypt(packet.getEncryptedMessage(), groupSecretKey);
 
-        System.out.printf("[%s] %s", packet.getMessengerUsername(), CryptoAESUtils.decrypt(packet.getEncryptedMessage(), groupSecretKey));
+        if (CryptoRSAUtils.verify(message, packet.getMessageSignature(), packet.getMessengerPublicKey())) {
+            System.out.printf("[%s] %s", packet.getMessengerUsername(), CryptoAESUtils.decrypt(packet.getEncryptedMessage(), groupSecretKey));
+        } else {
+            System.out.println("Received unverifyable message!");
+        }
     }
 
     public void handle(ClientboundSystemMessage packet) {
