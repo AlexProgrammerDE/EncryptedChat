@@ -17,6 +17,8 @@ import java.util.Scanner;
 public class EncryptedChat {
     public static final Path ROOT_PATH = Path.of("");
     public static final Path CLIENT_PATH = ROOT_PATH.resolve("client");
+    public static final Path SERVER_PATH = ROOT_PATH.resolve("server");
+    public static final Path CERT_PATH = ROOT_PATH.resolve("certificate.pem");
     public static final String SIGNATURE_VALUE = "EncryptedChat";
 
     public static void main(String[] args) {

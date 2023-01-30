@@ -14,15 +14,22 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.pistonmaster.encryptedchat.crypto.CryptoStorage;
 import net.pistonmaster.encryptedchat.data.StorageUser;
 import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
+import org.bouncycastle.openssl.PEMParser;
 
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static net.pistonmaster.encryptedchat.EncryptedChat.CERT_PATH;
+import static net.pistonmaster.encryptedchat.EncryptedChat.SERVER_PATH;
 
 @Getter
 @RequiredArgsConstructor
@@ -40,8 +47,11 @@ public class ServerMain implements Runnable {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
+
             SelfSignedCertificate ssc = new SelfSignedCertificate();
-            SslContext sslContext = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+            PEMParser parser = new PEMParser(Files.newBufferedReader(CERT_PATH));
+
+            SslContext sslContext = SslContextBuilder.forServer(CryptoStorage.loadPrivateKey(SERVER_PATH.resolve("server.key")), parser.readPemObject()).build();
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
