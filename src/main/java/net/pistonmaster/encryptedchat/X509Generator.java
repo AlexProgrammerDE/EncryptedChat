@@ -25,11 +25,11 @@ public class X509Generator {
         var validFrom = Date.from(now);
         var validTo = Date.from(now.plusSeconds(60L * 60 * 24 * 365));
         var certBuilder = new X509v3CertificateBuilder(
-                new X500Name("CN=My Application,O=My Organisation,L=My City,C=DE"),
+                new X500Name("CN=EncryptedChat,O=SchoolProject,L=Duesseldorf,C=DE"),
                 BigInteger.ONE,
                 validFrom,
                 validTo,
-                new X500Name("CN=My Application,O=My Organisation,L=My City,C=DE"),
+                new X500Name("CN=EncryptedChat,O=SchoolProject,L=Duesseldorf,C=DE"),
                 subPubKeyInfo
         );
         var signer = new JcaContentSignerBuilder("SHA256WithRSA")

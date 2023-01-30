@@ -56,7 +56,6 @@ public class ClientMain implements Runnable {
     public void run() {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-
             SslContext sslContext = SslContextBuilder.forClient()
                     .trustManager(CryptoStorage.loadCertificate(CERT_PATH)).build();
             Bootstrap b = new Bootstrap();
