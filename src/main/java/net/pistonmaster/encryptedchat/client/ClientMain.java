@@ -25,6 +25,7 @@ import net.pistonmaster.encryptedchat.network.ChannelDecoder;
 import net.pistonmaster.encryptedchat.network.ChannelEncoder;
 import net.pistonmaster.encryptedchat.packet.server.*;
 import net.pistonmaster.encryptedchat.util.ConsoleInput;
+import org.bouncycastle.est.jcajce.JcaJceUtils;
 
 import javax.crypto.SecretKey;
 import javax.net.ssl.X509TrustManager;
@@ -33,6 +34,9 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static net.pistonmaster.encryptedchat.EncryptedChat.CERT_PATH;
+import static net.pistonmaster.encryptedchat.EncryptedChat.ROOT_PATH;
 
 @Getter
 @RequiredArgsConstructor
@@ -52,17 +56,9 @@ public class ClientMain implements Runnable {
     public void run() {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            SslContext sslContext = SslContextBuilder.forClient().trustManager(new X509TrustManager() { // TODO Add a real trust manager
-                public void checkClientTrusted(X509Certificate[] chain, String authType) {
-                }
 
-                public void checkServerTrusted(X509Certificate[] chain, String authType) {
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            }).build();
+            SslContext sslContext = SslContextBuilder.forClient()
+                    .trustManager(CryptoStorage.loadCertificate(CERT_PATH)).build();
             Bootstrap b = new Bootstrap();
             b.group(workerGroup);
             b.channel(NioSocketChannel.class);

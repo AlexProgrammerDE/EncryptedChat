@@ -37,6 +37,14 @@ public class ClientPacketBus {
         clientMain.getConsoleInput().setPrefixInfo("");
     }
 
+    public void onGroupAdd(ClientboundGroupAdd packet) {
+        CryptoStorage.saveKey(
+                CryptoStorage.loadAESKey(CryptoRSAUtils.decrypt(packet.getEncryptedSecretKey(), clientMain.getPair().getPrivate())),
+                EncryptedChat.CLIENT_PATH.resolve(packet.getGroupInfo().groupKeyId().toString() + ".aeskey")
+        );
+        System.out.printf("Added to group %s with id %s", packet.getGroupInfo().groupName(), packet.getGroupInfo().groupId());
+    }
+
     public void handle(ClientboundGroupMessage packet) {
         String message = CryptoAESUtils.decrypt(packet.getEncryptedMessage(), groupSecretKey);
 

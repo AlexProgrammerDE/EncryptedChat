@@ -104,7 +104,7 @@ public class ServerPacketBus {
         for (Map.Entry<ChannelId, ConnectionState> entry : serverMain.getChannelStates().entrySet()) {
             if (entry.getValue().getBus() instanceof ServerPacketBus serverPacketBus
                     && serverPacketBus.getUser().userId().equals(packet.getTargetUser())) {
-                serverMain.getChannels().find(entry.getKey()).writeAndFlush(new ClientboundGroupAdd(packet.getEncryptedSecretKey()));
+                serverMain.getChannels().find(entry.getKey()).writeAndFlush(new ClientboundGroupAdd(currentGroup, packet.getEncryptedSecretKey()));
             }
         }
     }

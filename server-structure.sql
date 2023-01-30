@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS group_members
 );
 CREATE TABLE IF NOT EXISTS group_messages
 (
-    group_id TEXT NOT NULL PRIMARY KEY UNIQUE,
+    group_id TEXT NOT NULL,
     user_id  TEXT NOT NULL,
     message_encrypted  TEXT NOT NULL,
     message_signature  TEXT NOT NULL,

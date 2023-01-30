@@ -23,13 +23,13 @@ import org.bouncycastle.openssl.PEMParser;
 
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static net.pistonmaster.encryptedchat.EncryptedChat.CERT_PATH;
-import static net.pistonmaster.encryptedchat.EncryptedChat.SERVER_PATH;
+import static net.pistonmaster.encryptedchat.EncryptedChat.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -47,11 +47,10 @@ public class ServerMain implements Runnable {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-
-            SelfSignedCertificate ssc = new SelfSignedCertificate();
-            PEMParser parser = new PEMParser(Files.newBufferedReader(CERT_PATH));
-
-            SslContext sslContext = SslContextBuilder.forServer(CryptoStorage.loadPrivateKey(SERVER_PATH.resolve("server.key")), parser.readPemObject()).build();
+            SslContext sslContext = SslContextBuilder.forServer(
+                    CryptoStorage.loadPrivateKey(SERVER_PATH.resolve("server.key")),
+                    CryptoStorage.loadCertificate(ROOT_PATH.resolve("certificate.pem"))
+            ).build();
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
