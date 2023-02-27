@@ -21,7 +21,7 @@ public class EncryptedChat {
     public static final Path CERT_PATH = ROOT_PATH.resolve("certificate.pem");
     public static final String SIGNATURE_VALUE = "EncryptedChat";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ConsoleInput consoleInput = new ConsoleInput();
         consoleInput.registerArrowKey();
 
@@ -71,6 +71,9 @@ public class EncryptedChat {
                 Runtime.getRuntime().addShutdownHook(new Thread(client::shutdown));
                 client.run();
             }
+            case GENERATE_CERTIFICATE -> {
+                X509Generator.main(args);
+            }
         }
     }
 
@@ -95,6 +98,7 @@ public class EncryptedChat {
 
     enum Type {
         SERVER,
-        CLIENT
+        CLIENT,
+        GENERATE_CERTIFICATE
     }
 }

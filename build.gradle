@@ -5,6 +5,7 @@ plugins {
     id 'nu.studer.jooq' version '8.0'
     id "com.github.roroche.plantuml" version "1.0.2"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id "com.github.gmazzo.sqlite" version "0.2"
 }
 
 group 'net.pistonmaster'
@@ -25,6 +26,23 @@ mainClassName = 'net.pistonmaster.encryptedchat.EncryptedChat'
 repositories {
     mavenCentral()
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+tasks.register('createServerDatabase') {
+    def databaseFile = file("server.sqlite")
+
+    outputs.file databaseFile
+
+    doLast {
+        def db = openSQLiteDatabase(databaseFile)
+        def statementFile = file("server-structure.sql")
+        statementFile.text.split(";").each { statement ->
+            def sqlStatement = statement.trim() + ";"
+            if (sqlStatement != ";") {
+                db.execute sqlStatement
+            }
+        }
+    }
 }
 
 dependencies {
