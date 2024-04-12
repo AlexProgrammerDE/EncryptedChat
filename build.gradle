@@ -2,7 +2,7 @@ import nu.studer.gradle.jooq.JooqEdition
 
 plugins {
     id 'application'
-    id 'nu.studer.jooq' version '8.0'
+    id 'nu.studer.jooq' version '8.2.3'
     id "com.github.roroche.plantuml" version "1.0.2"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id "com.github.gmazzo.sqlite" version "0.2"
