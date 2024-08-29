@@ -51,7 +51,7 @@ dependencies {
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     implementation 'com.mojang:brigadier:1.0.18'
 
