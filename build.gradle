@@ -3,7 +3,6 @@ import nu.studer.gradle.jooq.JooqEdition
 plugins {
     id 'application'
     id 'nu.studer.jooq' version '10.1.1'
-    id "com.github.roroche.plantuml" version "1.0.2"
     id 'com.gradleup.shadow' version '9.2.2'
 }
 
@@ -19,8 +18,6 @@ run {
     mainClass.set('net.pistonmaster.encryptedchat.EncryptedChat')
     standardInput = System.in
 }
-
-mainClassName = 'net.pistonmaster.encryptedchat.EncryptedChat'
 
 repositories {
     mavenCentral()
@@ -53,13 +50,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-classDiagram {
-    packageName = "net.pistonmaster.encryptedchat"
-    outputFile = project.file('diagrams/class_diagram.plantuml')
-    // outputFile = new File("${projectDir}/diagrams/class_diagram.plantuml")
-    ignoredClasses = []
 }
 
 java {
