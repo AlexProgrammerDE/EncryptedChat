@@ -3,7 +3,7 @@ import nu.studer.gradle.jooq.JooqEdition
 plugins {
     id 'application'
     id 'nu.studer.jooq' version '10.2'
-    id 'com.gradleup.shadow' version '9.3.0'
+    id 'com.gradleup.shadow' version '9.3.1'
 }
 
 group 'net.pistonmaster'
@@ -41,8 +41,8 @@ dependencies {
     jooqGenerator 'org.xerial:sqlite-jdbc:3.51.1.0'
     implementation 'org.xerial:sqlite-jdbc:3.51.1.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.2'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.42'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
