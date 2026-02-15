@@ -41,8 +41,8 @@ dependencies {
     jooqGenerator 'org.xerial:sqlite-jdbc:3.51.2.0'
     implementation 'org.xerial:sqlite-jdbc:3.51.2.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.42'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
