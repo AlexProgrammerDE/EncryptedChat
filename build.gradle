@@ -34,8 +34,8 @@ dependencies {
 
     implementation 'com.mojang:brigadier:1.0.500'
 
-    compileOnly 'org.projectlombok:lombok:1.18.44'
-    annotationProcessor 'org.projectlombok:lombok:1.18.44'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
 
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     jooqGenerator 'org.xerial:sqlite-jdbc:3.53.0.0'
@@ -44,8 +44,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.44'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.44'
+    testCompileOnly 'org.projectlombok:lombok:1.18.46'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.46'
 }
 
 test {
